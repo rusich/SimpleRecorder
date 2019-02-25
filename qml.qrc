@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>images/microphone.png</file>
+        <file>images/stop.png</file>
+        <file>images/appicon.png</file>
+        <file>images/settings.png</file>
+    </qresource>
+</RCC>

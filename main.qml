@@ -11,9 +11,8 @@ ApplicationWindow {
     height: 800
     title: qsTr("Hello World")
 
-    property bool recording: false
     onClosing: {
-        if(recording) {
+        if(recorder.isRecording) {
             close.accepted = false;
         }
         else return;
@@ -22,7 +21,6 @@ ApplicationWindow {
     RoundButton {
         Keys.onPressed: {
             if (event.key === Qt.Key_Back) {
-                console.log("BACK!!!");
                 event.accepted = true;
             }
         }
@@ -38,7 +36,6 @@ ApplicationWindow {
 
         onClicked: {
             settingsDialog.visible = true;
-            console.log(recorder.recordLenght);
         }
 
         Image {
@@ -56,23 +53,26 @@ ApplicationWindow {
         width: parent.width/3
         height: width
         anchors.centerIn: parent
-        Material.background: recording? "#ff0000": "#4CAF50"
+        Material.background: recorder.isRecording? "#ff0000": "#4CAF50"
 
         onClicked: {
-            recording = !recording;
+            if(!recorder.isRecording)
+                recorder.startRecord();
+            else
+                recorder.stopRecord();
         }
 
         Image {
             id: micImg
             fillMode: Image.PreserveAspectFit
-            source:  recording? "qrc:///images/stop.png" : "qrc:///images/microphone.png"
+            source:  recorder.isRecording? "qrc:///images/stop.png" : "qrc:///images/microphone.png"
             anchors.centerIn: parent
             height:  parent.height * 0.8
         }
 
         SequentialAnimation
         {
-            running: recording
+            running: recorder.isRecording
             loops: Animation.Infinite
 
             ColorAnimation
@@ -121,7 +121,7 @@ ApplicationWindow {
         }
 
         Label {
-            id: description
+            id: lenghtDescription
             anchors.left: dlgCaption.left
             anchors.top: dlgCaption.bottom
             anchors.topMargin: 10
@@ -144,8 +144,8 @@ ApplicationWindow {
 
             id: rlCb
             textRole: "key"
-            anchors.left: description.left
-            anchors.top: description.bottom
+            anchors.left: lenghtDescription.left
+            anchors.top: lenghtDescription.bottom
             anchors.topMargin: 10
             width: parent.width * 0.92
             model: ListModel
@@ -156,6 +156,28 @@ ApplicationWindow {
                 ListElement { key: "10 мин."; value: 10 }
             }
         }
+        Label {
+            id: nameDescription
+            anchors.left: rlCb.left
+            anchors.top: rlCb.bottom
+            anchors.topMargin: 10
+            width: parent.width * 0.92
+            font.pointSize: 14
+            wrapMode:  Text.Wrap
+            text: qsTr("Название записи: ")
+        }
+
+        TextField {
+            id: recordNameTe
+            anchors.left: nameDescription.left
+            anchors.top: nameDescription.bottom
+            anchors.topMargin: 10
+            width: parent.width * 0.92
+            font.pointSize: 18
+            text: recorder.recordName
+        }
+
+
 
         RowLayout {
             id: bootomBtns
@@ -185,6 +207,7 @@ ApplicationWindow {
                 //                width: parent.width * 0.4
                 onClicked: {
                     recorder.recordLenght = rlModel.get(rlCb.currentIndex).value;
+                    recorder.recordName = recordNameTe.text;
                     settingsDialog.close();
                 }
             }

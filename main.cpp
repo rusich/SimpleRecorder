@@ -31,7 +31,6 @@ int main(int argc, char *argv[])
     default:
         qDebug()<<"Permission denied!!!";
         break;
-
     }
 #endif //Debug
 #else // Q_OS_ANDROID

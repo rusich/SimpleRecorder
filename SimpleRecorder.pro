@@ -12,11 +12,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+DEPENDPATH += src
+INCLUDEPATH += src
 SOURCES += \
-        main.cpp \
-    simplerecorder.cpp
+        src/main.cpp \
+    src/simplerecorder.cpp
 
-RESOURCES += qml.qrc 
+HEADERS += \
+    src/simplerecorder.h
+
+RESOURCES += res.qrc 
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -40,16 +45,8 @@ DISTFILES += \
     android/gradlew.bat \
     android/src/my/utl/WakeLock.java
 
-HEADERS += \
-    simplerecorder.h
 
-contains(ANDROID_TARGET_ARCH,x86) {
-    ANDROID_PACKAGE_SOURCE_DIR = \
-        $$PWD/android
-    QT+=androidextras
-}
-
-contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+android {
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
     QT+=androidextras

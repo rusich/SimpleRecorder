@@ -39,11 +39,11 @@ void SimpleRecorder::startRecord()
 //    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
     audioSettings.setQuality(QMultimedia::VeryHighQuality);
     QString container;
-#ifndef ANDROID
+#ifndef Q_OS_ANDROID
     audioSettings.setCodec("audio/x-vorbis");
     _filePath += ".ogg";
     container = "audio/ogg";
-#endif // ANDROID
+#endif // Q_OSANDROID
     audioRecorder->setEncodingSettings(audioSettings,QVideoEncoderSettings(),container);
     audioRecorder->setOutputLocation(QUrl::fromLocalFile(_filePath));
     connect(audioRecorder, SIGNAL(mutedChanged(bool)), this, SLOT(inputMuted(bool)));

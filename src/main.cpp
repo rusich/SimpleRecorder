@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     permissions <<"android.permission.RECORD_AUDIO";
     permissions <<"android.permission.WAKE_LOCK";
     QtAndroid::requestPermissionsSync(permissions);
-//#ifdef DEBUG
+#ifdef DEBUG
     QtAndroid::PermissionResult pr = QtAndroid::checkPermission(QString("android.permission.WAKE_LOCK"));
     switch(pr) {
     case QtAndroid::PermissionResult::Granted:
@@ -33,8 +33,7 @@ int main(int argc, char *argv[])
         qDebug()<<"Permission denied!!!";
         break;
     }
-//#endif //Debug
-    // Чтоб микрофон не выключался в режиме блокировки
+#endif //Debug
     QAndroidJniObject activity = QAndroidJniObject::callStaticObjectMethod("org/qtproject/qt5/android/QtNative", "activity", "()Landroid/app/Activity;");    //activity is valid
     if ( activity.isValid() )
     {
@@ -59,10 +58,9 @@ int main(int argc, char *argv[])
     SimpleRecorder sr("/tmp/SimpleRecorder");
 #endif // Q_OS_ANDROID
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("recorder",&sr);
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

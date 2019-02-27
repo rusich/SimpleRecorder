@@ -14,9 +14,10 @@ class SimpleRecorder : public QObject
     Q_PROPERTY(QString recordName READ getRecordName WRITE setRecordName)
     Q_PROPERTY(QString fileName READ getFileName NOTIFY filePathChanged)
     Q_PROPERTY(bool isRecording READ getRecording NOTIFY recordingChanged)
-    Q_PROPERTY(qint64 duration READ getDuration)
+    Q_PROPERTY(int duration READ getDuration)
+    Q_PROPERTY(QString durationString READ getDurationgString NOTIFY durationStringUpdated)
 public:
-    explicit SimpleRecorder(QString PathToSaveRecords = "/tmp/SimpleRecorder", QObject *parent = nullptr);
+    explicit SimpleRecorder(QString PathToSaveRecords , QObject *parent = nullptr);
     inline int getRecordLenght() { return _recordLenght; }
     inline void setRecordLenght(int lenghtInMinutes) { _recordLenght = lenghtInMinutes; }
     inline QString getRecordName() { return _recordName; }
@@ -26,17 +27,22 @@ public:
     Q_INVOKABLE void startRecord();
     Q_INVOKABLE void stopRecord();
     Q_INVOKABLE void stopRecordRotation();
-    inline qint64 getDuration() { return _recording? audioRecorder->duration(): 0; }
+    inline int getDuration() { return _recordStartTime.elapsed(); }
+    QString getDurationgString();
     ~SimpleRecorder();
 
 signals:
     void recordingChanged();
     void filePathChanged();
-public slots:
+    void durationStringUpdated();
+private slots:
     void rotateRecordFile();
+    void updateDurationString();
 private:
     QSettings settings;
+    QString _durationString;
     QTimer fileRotateTimer;
+    QTimer durationStringTimer;
     QString savePath;
     int _recordLenght;
     QString _recordName;
@@ -44,6 +50,7 @@ private:
     QAudioRecorder *audioRecorder;
     bool _recording;
     QString _filePath;
+    QTime _recordStartTime;
 };
 
 #endif // SIMPLERECORDER_H

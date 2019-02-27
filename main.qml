@@ -41,9 +41,11 @@ ApplicationWindow {
             onClicked: {
                 if(!recorder.isRecording) {
                     recorder.startRecord();
+//                    tmrUpdateDuration.start();
                 }
                 else {
                     recorder.stopRecordRotation();
+//                    tmrUpdateDuration.stop();
                 }
             }
 
@@ -92,8 +94,7 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: lblDuration.top
             anchors.bottomMargin: 20
-            font.weight: Font.DemiBold
-            font.pointSize: 15
+            font.pointSize: parent.width*0.07
             wrapMode: Text.Wrap
             horizontalAlignment: Text.AlignHCenter
 
@@ -101,13 +102,14 @@ ApplicationWindow {
 
         Label {
             id: lblDuration
-            text: "00:00.00"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.leftMargin: font.pointSize
             font.weight: Font.DemiBold
-            font.pointSize: 60
+            font.pointSize: parent.width*0.2
             horizontalAlignment: Text.AlignHCenter
             color: "#78d1fe"
+            text: recorder.durationString
 
         }
 
@@ -195,6 +197,7 @@ ApplicationWindow {
                     ListElement { key: "1 мин."; value: 1 }
                     ListElement { key: "5 мин."; value: 5 }
                     ListElement { key: "10 мин."; value: 10 }
+                    ListElement { key: "70 мин."; value: 70 }
                 }
             }
             Label {
@@ -254,4 +257,20 @@ ApplicationWindow {
             } // bottomBtns
         }
     } // container
+
+    Timer {
+        id: tmrUpdateDuration
+        repeat: true
+        interval: 10
+        onTriggered: {
+            lblDuration.text = recorder.durationString;
+//            var tmp = recorder.duration;
+//            var sec = Math.floor(tmp / 1000);
+//            var min = Math.floor(sec / 60);
+//            sec = Math.floor(sec % 60);
+//            var msec = Math.floor(tmp%1000);
+//            lblDuration.text = min +":"+sec;
+//            lblDuration.text = msec;
+        }
+    }
 }

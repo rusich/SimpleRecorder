@@ -35,9 +35,11 @@ signals:
     void recordingChanged();
     void filePathChanged();
     void durationStringUpdated();
+    void muted(bool muted);
 private slots:
     void rotateRecordFile();
     void updateDurationString();
+    void inputMuted(bool muted);
 private:
     QSettings settings;
     QString _durationString;

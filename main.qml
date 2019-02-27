@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 480
     height: 800
-    title: qsTr("Hello World")
+    title: qsTr("SimpleRecorder")
 
     onClosing: {
         if(recorder.isRecording) {
@@ -18,10 +18,28 @@ ApplicationWindow {
         else return;
     }
 
+    Connections  {
+        target: recorder
+        onMuted: {
+            mutedIndicator.text = "MUTED: " + muted;
+            mutedIndicator.visible = true;
+        }
+    }
 
     Item {
         id: container
         anchors.fill: parent
+
+        Text {
+            id: mutedIndicator
+            visible: false
+            font.pointSize: 60
+            color: "red"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 20
+        }
+
         RoundButton {
             //        focus: true
             //        Keys.onPressed: {
@@ -41,11 +59,9 @@ ApplicationWindow {
             onClicked: {
                 if(!recorder.isRecording) {
                     recorder.startRecord();
-//                    tmrUpdateDuration.start();
                 }
                 else {
                     recorder.stopRecordRotation();
-//                    tmrUpdateDuration.stop();
                 }
             }
 
@@ -197,7 +213,6 @@ ApplicationWindow {
                     ListElement { key: "1 мин."; value: 1 }
                     ListElement { key: "5 мин."; value: 5 }
                     ListElement { key: "10 мин."; value: 10 }
-                    ListElement { key: "70 мин."; value: 70 }
                 }
             }
             Label {
@@ -235,19 +250,14 @@ ApplicationWindow {
                     flat: true
                     Layout.fillHeight: true
                     Layout.alignment: Qt.AlignRight
-                    //                    Layout.preferredWidth: parent.width/2
                     text: "Отмена"
                     onClicked: settingsDialog.close()
-                    //                width: parent.width * 0.4
                 }
                 Button {
                     flat: true
                     Layout.fillHeight: true
                     Layout.alignment: Qt.AlignRight
-                    //                    Layout.fillWidth: true
                     text: "Сохранить"
-                    //                    Material.background: "#4CAF50"
-                    //                width: parent.width * 0.4
                     onClicked: {
                         recorder.recordLenght = rlModel.get(rlCb.currentIndex).value;
                         recorder.recordName = recordNameTe.text;
@@ -257,20 +267,4 @@ ApplicationWindow {
             } // bottomBtns
         }
     } // container
-
-    Timer {
-        id: tmrUpdateDuration
-        repeat: true
-        interval: 10
-        onTriggered: {
-            lblDuration.text = recorder.durationString;
-//            var tmp = recorder.duration;
-//            var sec = Math.floor(tmp / 1000);
-//            var min = Math.floor(sec / 60);
-//            sec = Math.floor(sec % 60);
-//            var msec = Math.floor(tmp%1000);
-//            lblDuration.text = min +":"+sec;
-//            lblDuration.text = msec;
-        }
-    }
 }

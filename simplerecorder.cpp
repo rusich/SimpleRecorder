@@ -34,10 +34,10 @@ void SimpleRecorder::startRecord()
     //    qDebug()<<audioRecorder->supportedAudioCodecs();
     //    qDebug()<<audioRecorder->supportedContainers();
     _filePath = savePath + "/" + _recordName.replace(" ","_") +
-            QDateTime::currentDateTime().toString("_dd-MM-yyyy_HH:mm:ss");
+            QDateTime::currentDateTime().toString("_dd-MM-yyyy_HHmmss");
     audioRecorder = new QAudioRecorder();
-    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
-    audioSettings.setQuality(QMultimedia::HighQuality);
+//    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
+    audioSettings.setQuality(QMultimedia::VeryHighQuality);
     QString container;
 #ifndef ANDROID
     audioSettings.setCodec("audio/x-vorbis");
@@ -46,16 +46,17 @@ void SimpleRecorder::startRecord()
 #endif // ANDROID
     audioRecorder->setEncodingSettings(audioSettings,QVideoEncoderSettings(),container);
     audioRecorder->setOutputLocation(QUrl::fromLocalFile(_filePath));
+    connect(audioRecorder, SIGNAL(mutedChanged(bool)), this, SLOT(inputMuted(bool)));
+
     emit filePathChanged();
     audioRecorder->record();
     _recordStartTime.restart();
     _recording = true;
     _recordStartTime = QTime::currentTime();
-    fileRotateTimer.setInterval(_recordLenght*1000);
+    fileRotateTimer.setInterval(_recordLenght*1000*60);
     fileRotateTimer.start();
     emit recordingChanged();
     durationStringTimer.start();
-
 }
 
 void SimpleRecorder::stopRecord()
@@ -106,5 +107,11 @@ void SimpleRecorder::updateDurationString()
             .arg(msec,2,10,QLatin1Char('0'));
 
     emit durationStringUpdated();
+}
+
+void SimpleRecorder::inputMuted(bool muted)
+{
+   qDebug()<<"Muted: "<<muted;
+   emit this->muted(muted);
 }
 

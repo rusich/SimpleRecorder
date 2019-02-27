@@ -37,7 +37,8 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    android/src/my/utl/WakeLock.java
 
 HEADERS += \
     simplerecorder.h

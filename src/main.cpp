@@ -2,7 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDebug>
+#include <QThread>
 #include "simplerecorder.h"
+#include "mailsender.h"
 #ifdef Q_OS_ANDROID
 #include <QStringList>
 #include <QString>
@@ -10,6 +12,19 @@
 #include <QAndroidJniObject>
 #endif //Q_OS_ANDROID
 
+void checkDirs(QString PathToSaveRecords) {
+    if(!QDir(PathToSaveRecords).exists())  {
+        if(!QDir().mkdir(PathToSaveRecords)) qDebug("Cannot create directory to save records!");
+    }
+    QString to_send = PathToSaveRecords + QString("/to_send");
+    if(!QDir(to_send).exists())  {
+        if(!QDir().mkdir(to_send)) qDebug("Cannot create directory 'to_send'!");
+    }
+    QString sent = PathToSaveRecords + QString("/sent");
+    if(!QDir(sent).exists())  {
+        if(!QDir().mkdir(sent)) qDebug("Cannot create directory 'send'!");
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -52,11 +67,19 @@ int main(int argc, char *argv[])
     {
         assert( false );
     }
-   //
+    //
     SimpleRecorder sr("/storage/emulated/0/SimpleRecorder");
 #else // Q_OS_ANDROID
     SimpleRecorder sr("/tmp/SimpleRecorder");
 #endif // Q_OS_ANDROID
+
+    checkDirs(sr.getSavePath());
+    QThread *thread = new QThread(&sr);
+    MailSender ms(sr.getSavePath()+"/"+"to_send");
+    ms.moveToThread(thread);
+    QThread::connect(thread,SIGNAL(started()),&ms,SLOT(start()));
+    thread->start();
+
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("recorder",&sr);

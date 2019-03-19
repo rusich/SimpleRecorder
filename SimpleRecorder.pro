@@ -16,10 +16,12 @@ DEPENDPATH += src
 INCLUDEPATH += src
 SOURCES += \
         src/main.cpp \
-    src/simplerecorder.cpp
+    src/simplerecorder.cpp \
+    src/mailsender.cpp
 
 HEADERS += \
-    src/simplerecorder.h
+    src/simplerecorder.h \
+    src/mailsender.h
 
 RESOURCES += res.qrc 
 

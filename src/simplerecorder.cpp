@@ -5,16 +5,14 @@
 #include <QStandardPaths>
 
 SimpleRecorder::SimpleRecorder(QString PathToSaveRecords, QObject *parent) :
-    QObject(parent), savePath(PathToSaveRecords), _recording(false)
+    QObject(parent), _savePath(PathToSaveRecords), _recording(false)
 {
     fileRotateTimer.setSingleShot(false);
     connect(&fileRotateTimer, SIGNAL(timeout()), this, SLOT(rotateRecordFile()));
     durationStringTimer.setSingleShot(false);
     durationStringTimer.setInterval(10);
     connect(&durationStringTimer, SIGNAL(timeout()), this, SLOT(updateDurationString()));
-    if(!QDir(savePath).exists())  {
-        if(!QDir().mkdir(savePath)) qDebug("Cannot create directory to save records!");
-    }
+
 
     _recordLenght = settings.value("recorder/RecordLenght", 5).toInt();
     _recordName = settings.value("recorder/RecordName", "Default").toString();
@@ -33,7 +31,7 @@ void SimpleRecorder::startRecord()
 
     //    qDebug()<<audioRecorder->supportedAudioCodecs();
     //    qDebug()<<audioRecorder->supportedContainers();
-    _filePath = savePath + "/" + _recordName.replace(" ","_") +
+    _filePath = _savePath + "/" + _recordName.replace(" ","_") +
             QDateTime::currentDateTime().toString("_dd-MM-yyyy_HHmmss");
     audioRecorder = new QAudioRecorder();
 //    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
@@ -62,11 +60,18 @@ void SimpleRecorder::startRecord()
 void SimpleRecorder::stopRecord()
 {
     audioRecorder->stop();
+    auto outputFilePath = audioRecorder->outputLocation().path();
+    auto outputFileName = audioRecorder->outputLocation().fileName();
+
     delete audioRecorder;
     _recording = false;
     emit recordingChanged();
     durationStringTimer.stop();
     emit durationStringUpdated();
+    // move recorded file to $RECORDING_PATH/to_send/
+    QFile f(outputFilePath);
+    f.rename(_savePath+"/to_send/"+outputFileName); //TODO: do something if false
+    f.close();
 }
 
 void SimpleRecorder::stopRecordRotation()

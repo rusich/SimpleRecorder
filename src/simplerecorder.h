@@ -15,12 +15,14 @@ class SimpleRecorder : public QObject
     Q_PROPERTY(QString fileName READ getFileName NOTIFY filePathChanged)
     Q_PROPERTY(bool isRecording READ getRecording NOTIFY recordingChanged)
     Q_PROPERTY(int duration READ getDuration)
+    Q_PROPERTY(QString savePath READ getSavePath MEMBER _savePath)
     Q_PROPERTY(QString durationString READ getDurationgString NOTIFY durationStringUpdated)
 public:
     explicit SimpleRecorder(QString PathToSaveRecords , QObject *parent = nullptr);
     inline int getRecordLenght() { return _recordLenght; }
     inline void setRecordLenght(int lenghtInMinutes) { _recordLenght = lenghtInMinutes; }
     inline QString getRecordName() { return _recordName; }
+    inline QString getSavePath() { return _savePath; }
     inline void setRecordName(QString newRecordName) { _recordName = newRecordName; }
     QString getFileName();
     inline bool getRecording() { return  _recording; }
@@ -45,7 +47,7 @@ private:
     QString _durationString;
     QTimer fileRotateTimer;
     QTimer durationStringTimer;
-    QString savePath;
+    QString _savePath;
     int _recordLenght;
     QString _recordName;
     QAudioEncoderSettings audioSettings;

@@ -18,7 +18,7 @@ Mailer::Mailer(QString recordsPath, QObject *parent) :
 
 }
 
-Mailer::~Mailer()
+void Mailer::saveSettings()
 {
     settings.setValue("mailer/Server", _server);
     settings.setValue("mailer/Port", _port);

@@ -15,8 +15,8 @@ class Mailer : public QObject
     Q_PROPERTY(QString password MEMBER _password)
 public:
     explicit Mailer(QString recordsPath, QObject *parent = nullptr);
-    ~Mailer();
-
+    Q_INVOKABLE void saveSettings();
+    
 signals:
 
 public slots:

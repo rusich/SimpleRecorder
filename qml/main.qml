@@ -349,6 +349,8 @@ ApplicationWindow {
                         mailer.login = teSenderEmail.text;
                         mailer.password = tePassword.text;
                         mailer.recipientEmail = teRecipient.text;
+                        recorder.saveSettings();
+                        mailer.saveSettings();
                         settingsDialog.close();
                     }
                 }

@@ -87,7 +87,7 @@ QString SimpleRecorder::getDurationgString()
     return _durationString;
 }
 
-SimpleRecorder::~SimpleRecorder()
+void SimpleRecorder::saveSettings()
 {
     settings.setValue("recorder/RecordLenght", _recordLenght);
     settings.setValue("recorder/RecordName", _recordName);

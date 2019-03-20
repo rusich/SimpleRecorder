@@ -31,8 +31,9 @@ public:
     Q_INVOKABLE void stopRecordRotation();
     inline int getDuration() { return _recordStartTime.elapsed(); }
     QString getDurationgString();
-    ~SimpleRecorder();
+    Q_INVOKABLE void saveSettings();
 
+    
 signals:
     void recordingChanged();
     void filePathChanged();

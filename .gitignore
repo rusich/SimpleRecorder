@@ -3,14 +3,14 @@
 
 *~
 *.autosave
-*.a
 *.core
 *.moc
 *.o
+*.a
+*.so
 *.obj
 *.orig
 *.rej
-*.so
 *.so.*
 *_pch.h.cpp
 *_resource.rc

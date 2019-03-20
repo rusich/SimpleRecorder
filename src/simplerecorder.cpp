@@ -29,13 +29,13 @@ void SimpleRecorder::startRecord()
     if(_recording)
         return;
 
-    //    qDebug()<<audioRecorder->supportedAudioCodecs();
-    //    qDebug()<<audioRecorder->supportedContainers();
     _filePath = _savePath + "/" + _recordName.replace(" ","_") +
             QDateTime::currentDateTime().toString("_dd-MM-yyyy_HHmmss");
     audioRecorder = new QAudioRecorder();
-//    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
+    audioSettings.setEncodingMode(QMultimedia::TwoPassEncoding);
     audioSettings.setQuality(QMultimedia::VeryHighQuality);
+    audioSettings.setSampleRate(16000);
+    audioSettings.setChannelCount(1);
     QString container;
 #ifndef Q_OS_ANDROID
     audioSettings.setCodec("audio/x-vorbis");

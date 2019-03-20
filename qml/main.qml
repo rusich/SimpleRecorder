@@ -149,6 +149,11 @@ ApplicationWindow {
                     }
                 }
                 recordNameTe.text = recorder.recordName;
+                teSenderName.text = mailer.senderName;
+                teSenderEmail.text = mailer.login;
+                tePassword.text = mailer.password;
+                teRecipient.text = mailer.recipientEmail;
+
                 settingsDialog.visible = true;
             }
 
@@ -171,7 +176,7 @@ ApplicationWindow {
             focus: true
             anchors.centerIn: parent
             width: app.width * 0.9
-            height: 300
+            height: 600
 
 
             Label {
@@ -190,22 +195,18 @@ ApplicationWindow {
                 anchors.top: dlgCaption.bottom
                 anchors.topMargin: 10
                 width: parent.width * 0.92
-                font.pointSize: 14
+                font.pointSize: 18
                 wrapMode:  Text.Wrap
                 text: qsTr("Длительность записи для каждого файла (в минутах): ")
             }
 
             ComboBox
             {
-                Component.onCompleted: {
-
-                }
-
                 id: rlCb
                 textRole: "key"
                 anchors.left: lenghtDescription.left
                 anchors.top: lenghtDescription.bottom
-                anchors.topMargin: 10
+                anchors.topMargin: 0
                 width: parent.width * 0.92
                 model: ListModel
                 {
@@ -221,7 +222,7 @@ ApplicationWindow {
                 anchors.top: rlCb.bottom
                 anchors.topMargin: 10
                 width: parent.width * 0.92
-                font.pointSize: 14
+                font.pointSize: 18
                 wrapMode:  Text.Wrap
                 text: qsTr("Название записи: ")
             }
@@ -230,12 +231,95 @@ ApplicationWindow {
                 id: recordNameTe
                 anchors.left: nameDescription.left
                 anchors.top: nameDescription.bottom
-                anchors.topMargin: 10
+                anchors.topMargin: 0
                 width: parent.width * 0.92
                 font.pointSize: 18
             }
 
+            //sender name
+            Label {
+                id: lblSenderName
+                anchors.left: recordNameTe.left
+                anchors.top: recordNameTe.bottom
+                anchors.topMargin: 10
+                width: parent.width * 0.92
+                font.pointSize: 18
+                wrapMode:  Text.Wrap
+                text: qsTr("Имя отправителя: ")
+            }
 
+            TextField {
+                id: teSenderName
+                anchors.left: lblSenderName.left
+                anchors.top: lblSenderName.bottom
+                anchors.topMargin: 0
+                width: parent.width * 0.92
+                font.pointSize: 18
+            }
+
+            // sender email
+            Label {
+                id: lblSenderEmail
+                anchors.left: teSenderName.left
+                anchors.top: teSenderName.bottom
+                anchors.topMargin: 10
+                width: parent.width * 0.92
+                font.pointSize: 18
+                wrapMode:  Text.Wrap
+                text: qsTr("Email (mail.ru): ")
+            }
+
+            TextField {
+                id: teSenderEmail
+                anchors.left: lblSenderEmail.left
+                anchors.top: lblSenderEmail.bottom
+                anchors.topMargin: 0
+                width: parent.width * 0.92
+                font.pointSize: 18
+            }
+
+            // password
+            Label {
+                id: lblPassword
+                anchors.left: teSenderEmail.left
+                anchors.top: teSenderEmail.bottom
+                anchors.topMargin: 10
+                width: parent.width * 0.92
+                font.pointSize: 18
+                wrapMode:  Text.Wrap
+                text: qsTr("Пароль: ")
+            }
+
+            TextField {
+                id: tePassword
+                anchors.left: lblPassword.left
+                anchors.top: lblPassword.bottom
+                anchors.topMargin: 0
+                width: parent.width * 0.92
+                echoMode: TextInput.Password
+                font.pointSize: 18
+            }
+
+            // recipient
+            Label {
+                id: lblRecipient
+                anchors.left: tePassword.left
+                anchors.top: tePassword.bottom
+                anchors.topMargin: 10
+                width: parent.width * 0.92
+                font.pointSize: 18
+                wrapMode:  Text.Wrap
+                text: qsTr("Получатель: ")
+            }
+
+            TextField {
+                id: teRecipient
+                anchors.left: lblRecipient.left
+                anchors.top: lblRecipient.bottom
+                anchors.topMargin: 0
+                width: parent.width * 0.92
+                font.pointSize: 18
+            }
 
             RowLayout {
                 id: bootomBtns
@@ -261,6 +345,10 @@ ApplicationWindow {
                     onClicked: {
                         recorder.recordLenght = rlModel.get(rlCb.currentIndex).value;
                         recorder.recordName = recordNameTe.text;
+                        mailer.senderName = teSenderName.text;
+                        mailer.login = teSenderEmail.text;
+                        mailer.password = tePassword.text;
+                        mailer.recipientEmail = teRecipient.text;
                         settingsDialog.close();
                     }
                 }

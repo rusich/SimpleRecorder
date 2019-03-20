@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QThread>
 #include "simplerecorder.h"
-#include "mailsender.h"
+#include "mailer.h"
 #ifdef Q_OS_ANDROID
 #include <QStringList>
 #include <QString>
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 
     checkDirs(sr.getSavePath());
     QThread *thread = new QThread(&sr);
-    MailSender ms(sr.getSavePath()+"/"+"to_send");
+    Mailer ms(sr.getSavePath());
     ms.moveToThread(thread);
     QThread::connect(thread,SIGNAL(started()),&ms,SLOT(start()));
     thread->start();
@@ -83,6 +83,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("recorder",&sr);
+    engine.rootContext()->setContextProperty("mailer",&ms);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

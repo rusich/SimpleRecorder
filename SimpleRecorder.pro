@@ -14,14 +14,41 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 DEPENDPATH += src
 INCLUDEPATH += src
+INCLUDEPATH += SmtpClient-for-Qt/src
 SOURCES += \
         src/main.cpp \
     src/simplerecorder.cpp \
-    src/mailsender.cpp
+    SmtpClient-for-Qt/src/emailaddress.cpp \
+    SmtpClient-for-Qt/src/mimeattachment.cpp \
+    SmtpClient-for-Qt/src/mimecontentformatter.cpp \
+    SmtpClient-for-Qt/src/mimefile.cpp \
+    SmtpClient-for-Qt/src/mimehtml.cpp \
+    SmtpClient-for-Qt/src/mimeinlinefile.cpp \
+    SmtpClient-for-Qt/src/mimemessage.cpp \
+    SmtpClient-for-Qt/src/mimemultipart.cpp \
+    SmtpClient-for-Qt/src/mimepart.cpp \
+    SmtpClient-for-Qt/src/mimetext.cpp \
+    SmtpClient-for-Qt/src/quotedprintable.cpp \
+    SmtpClient-for-Qt/src/smtpclient.cpp \
+    src/mailer.cpp
 
 HEADERS += \
     src/simplerecorder.h \
-    src/mailsender.h
+    SmtpClient-for-Qt/src/emailaddress.h \
+    SmtpClient-for-Qt/src/mimeattachment.h \
+    SmtpClient-for-Qt/src/mimecontentformatter.h \
+    SmtpClient-for-Qt/src/mimefile.h \
+    SmtpClient-for-Qt/src/mimehtml.h \
+    SmtpClient-for-Qt/src/mimeinlinefile.h \
+    SmtpClient-for-Qt/src/mimemessage.h \
+    SmtpClient-for-Qt/src/mimemultipart.h \
+    SmtpClient-for-Qt/src/mimepart.h \
+    SmtpClient-for-Qt/src/mimetext.h \
+    SmtpClient-for-Qt/src/quotedprintable.h \
+    SmtpClient-for-Qt/src/smtpclient.h \
+    SmtpClient-for-Qt/src/smtpexports.h \
+    SmtpClient-for-Qt/src/SmtpMime \
+    src/mailer.h
 
 RESOURCES += res.qrc 
 
@@ -47,8 +74,14 @@ DISTFILES += \
     android/gradlew.bat \
     android/src/my/utl/WakeLock.java
 
+include(openssllibsbin.pri)
 
 android {
+#    LIBS +=-L/home/rusich/Devel/SSL/openssl-0.9.8zh/libcrypto.a
+#    LIBS +=-l/home/rusich/Devel/SSL/openssl-0.9.8zh/libssl.a
+#    LIBS +=-L/home/rusich/Devel/SSL/openssl-android-build/libs/android/clang/armeabi-v7a
+#    LIBS +=-L/home/rusich/Devel/SSL/openssl-android-build/libs/android/clang/x86
+#    LIBS +=-lssl -lcrypto
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
     QT+=androidextras
